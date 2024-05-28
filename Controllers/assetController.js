@@ -17,6 +17,7 @@ const db = getFirestore(firebase);
 export const createAsset = async (req, res, next) => {
     try {
       const data = req.body;
+      // console.log(data);
       await addDoc(collection(db, 'assets'), data);
       res.status(200).send('asset created successfully');
     } catch (error) {
