@@ -1,28 +1,27 @@
-// /Routes/mobileRoute.js
 const express = require('express');
 const {
-  createAsset,
-  getAsset,
-  updateAsset,
-  deleteAsset,
-  getAllAssets
+  createMobile,
+  getMobile,
+  updateMobile,
+  deleteMobile,
+  getAllMobiles
 } = require('../Controllers/mobileController');
 
 const router = express.Router();
 
+// Get all mobile assets
+router.get('/mobiles', getAllMobiles);
+
 // Create a new mobile asset
-router.post('/assets', createAsset);
+router.post('/mobiles/new', createMobile);
 
 // Get a mobile asset by ID
-router.get('/assets/:assetId', getAsset);
+router.get('/mobiles/:assetId', getMobile);
 
 // Update a mobile asset by ID
-router.put('/assets/:assetId', updateAsset);
+router.put('/mobiles/update/:assetId', updateMobile);
 
 // Delete a mobile asset by ID
-router.delete('/assets/:assetId', deleteAsset);
-
-// Query all mobile assets
-router.get('/assets', getAllAssets);
+router.delete('/mobiles/delete/:assetId', deleteMobile);
 
 module.exports = router;

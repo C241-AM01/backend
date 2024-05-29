@@ -8,7 +8,7 @@ const {
   } = require('../Models/mobileModel');
   
   // Create a new mobile asset
-  async function createAsset(req, res) {
+  async function createMobile(req, res) {
     try {
       const assetData = req.body;
       const asset = await createMobileAsset(assetData);
@@ -19,7 +19,7 @@ const {
   }
   
   // Get a mobile asset by ID
-  async function getAsset(req, res) {
+  async function getMobile(req, res) {
     try {
       const assetId = req.params.assetId;
       const asset = await getMobileAsset(assetId);
@@ -30,7 +30,7 @@ const {
   }
   
   // Update a mobile asset by ID
-  async function updateAsset(req, res) {
+  async function updateMobile(req, res) {
     try {
       const assetId = req.params.assetId;
       const newData = req.body;
@@ -42,7 +42,7 @@ const {
   }
   
   // Delete a mobile asset by ID
-  async function deleteAsset(req, res) {
+  async function deleteMobile(req, res) {
     try {
       const assetId = req.params.assetId;
       const deletedAsset = await deleteMobileAsset(assetId);
@@ -53,7 +53,7 @@ const {
   }
   
   // Query all mobile assets
-  async function getAllAssets(req, res) {
+  async function getAllMobiles(req, res) {
     try {
       const assets = await queryMobileAssets();
       res.json(assets);
@@ -63,10 +63,10 @@ const {
   }
   
   module.exports = {
-    createAsset,
-    getAsset,
-    updateAsset,
-    deleteAsset,
-    getAllAssets
+    createMobile,
+    getMobile,
+    updateMobile,
+    deleteMobile,
+    getAllMobiles
   };
   
