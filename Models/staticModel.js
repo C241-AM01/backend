@@ -1,9 +1,16 @@
 const admin = require('firebase-admin');
 const database = require('../database');
 
+// Convert to date format
+function getLocalizedDateString() {
+  const date = new Date();
+  return date.toLocaleString('en-US', { timeZone: 'Asia/Jakarta', hour12: false }); 
+}
+
 // Create a new Static asset
 async function createStaticAsset(assetData) {
   const ref = await database.ref('statics').push();
+  const localizedDate = getLocalizedDateString();
   await ref.set({
     id_as: ref.key,
     name_as: assetData.name_as,
@@ -11,26 +18,32 @@ async function createStaticAsset(assetData) {
     depreciationRate_as: assetData.depreciationRate_as,
     photo_as: assetData.photo_as,
     price_as: assetData.price_as,
-    purchaseDate_as: purchaseDate_as,
     QRcode_as: assetData.QRcode_as,
     SKU_as: assetData.SKU_as,
-    createdAt: admin.database.ServerValue.TIMESTAMP,
-    updatedAt: admin.database.ServerValue.TIMESTAMP
+    purchaseDate_as: assetData.purchaseDate_as,
+    createdAt: localizedDate,
+    updatedAt: localizedDate
   });
-  return { id: ref.key, ...assetData };
+  return { id_as: ref.key, ...assetData, createdAt: localizedDate, updatedAt: localizedDate };
 }
 
 // Read a Static asset by ID
 async function getStaticAsset(assetId) {
   const snapshot = await database.ref('statics/' + assetId).once('value');
-  return snapshot.val();
+  const asset = snapshot.val();
+  if (asset) {
+    asset.createdAt = new Date(asset.createdAt).toLocaleString('en-US', { timeZone: 'Asia/Jakarta', hour12: false });
+    asset.updatedAt = new Date(asset.updatedAt).toLocaleString('en-US', { timeZone: 'Asia/Jakarta', hour12: false });
+  }
+  return asset;
 }
 
 // Update a Static asset by ID
 async function updateStaticAsset(assetId, newData) {
-  newData.updatedAt = admin.database.ServerValue.TIMESTAMP;
+  const localizedDate = getLocalizedDateString();  
+  newData.updatedAt = localizedDate;
   await database.ref('statics/' + assetId).update(newData);
-  return { id_as: assetId, ...newData };
+  return { id_as: assetId, ...newData, updatedAt: localizedDate };
 }
 
 // Delete a Static asset by ID
@@ -42,11 +55,14 @@ async function deleteStaticAsset(assetId) {
 // Query all Static assets
 async function queryStaticAssets() {
   const snapshot = await database.ref('statics').once('value');
-  const statics = [];
+  const assets = [];
   snapshot.forEach(childSnapshot => {
-    statics.push({ id_as: childSnapshot.key, ...childSnapshot.val() });
+    const asset = childSnapshot.val();
+    asset.createdAt = new Date(asset.createdAt).toLocaleString('en-US', { timeZone: 'Asia/Jakarta', hour12: false });
+    asset.updatedAt = new Date(asset.updatedAt).toLocaleString('en-US', { timeZone: 'Asia/Jakarta', hour12: false });
+    assets.push({ id: childSnapshot.key, ...asset });
   });
-  return statics;
+  return assets;
 }
 
 module.exports = {
