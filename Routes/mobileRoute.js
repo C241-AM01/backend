@@ -6,6 +6,7 @@ const {
   deleteMobile,
   getAllMobiles
 } = require('../Controllers/mobileController');
+// const { authenticateJWT, authorizeRole } = require('../Controllers/authController');
 
 const router = express.Router();
 
